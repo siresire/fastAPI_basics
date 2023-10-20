@@ -1,10 +1,18 @@
 from fastapi import FastAPI, Depends, status,Response,HTTPException
 from . import schemas,models
-from .database import SessionLocal, engine
+from .database import SessionLocal, engine 
 from sqlalchemy.orm import Session
 from typing import List
+from passlib.context import CryptContext
 
-# migrating all the tables 
+from . hashing import Hash
+
+
+
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# migrating all the tables
 models.Base.metadata.create_all(bind=engine)
 
 def get_db():
@@ -16,8 +24,6 @@ def get_db():
 
 
 app = FastAPI()
-
-
 
 
 # Start by creatign a post 
@@ -77,3 +83,22 @@ async def single_blog(id, db : Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
                             detail=f"Blog with {id} not found")
     return blog
+
+
+
+#  Creatign a user
+@app.post('/user', status_code=status.HTTP_201_CREATED, response_model=schemas.ShowUser)
+async def create_user(request : schemas.User, db : Session = Depends(get_db)):
+    
+    new_user = models.User(name = request.name, email = request.email, password = Hash.bycrypt(request.password))
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
+
+
+#  get all the user
+@app.get('/user', status_code=status.HTTP_200_OK, response_model=List[schemas.ShowUser])
+async def all_users(db : Session = Depends(get_db)):
+    users = db.query(models.User).all()
+    return users

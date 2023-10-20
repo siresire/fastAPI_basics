@@ -28,3 +28,4 @@ is used to map objects into the database field
 
 ### Storing blogs to the database
 
+define the db in create_blog function
