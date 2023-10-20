@@ -1,6 +1,9 @@
 from fastapi import FastAPI
+from . import schemas,models
+from .database import SessionLocal, engine
 
-from . import schemas
+
+models.Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()

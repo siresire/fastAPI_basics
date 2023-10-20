@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 # Define the database url 
-SQLALCHEMY_DATABASE_URL = "sqlite:///.blog.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///blog.db"
 
 # Creating the engine
 engine = create_engine(
