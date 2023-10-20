@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, status,Response,HTTPException
 from . import schemas,models
 from .database import SessionLocal, engine
 from sqlalchemy.orm import Session
+from typing import List
 
 # migrating all the tables 
 models.Base.metadata.create_all(bind=engine)
@@ -58,7 +59,7 @@ async def update_blog(request : schemas.Blog, id,db : Session = Depends(get_db))
 
 
 # Get all the blogs
-@app.get('/blog', status_code=status.HTTP_200_OK)
+@app.get('/blog', status_code=status.HTTP_200_OK, response_model=List[schemas.ShowBlog])
 async def all_blogs(db : Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
@@ -66,7 +67,7 @@ async def all_blogs(db : Session = Depends(get_db)):
 
 
 # Get a single blog
-@app.get('/blog{id}', status_code=status.HTTP_200_OK)
+@app.get('/blog{id}', status_code=status.HTTP_200_OK, response_model=schemas.ShowBlog)
 async def single_blog(id, db : Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id).first()
     
