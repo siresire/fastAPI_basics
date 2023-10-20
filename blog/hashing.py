@@ -10,4 +10,5 @@ class Hash():
         return hashedPassword
         
         
-    
+    def verify(hashed_passsword, plain_password):
+        return pwd_context.verify(plain_password, hashed_passsword)
