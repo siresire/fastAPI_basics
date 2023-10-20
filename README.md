@@ -93,3 +93,5 @@ creat a new schema and the models.User in the model file to create a new databas
 ### Storing blogs to the database
 
 define the db in create_blog function
+
+![Alt text](image.png)
