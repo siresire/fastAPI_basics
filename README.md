@@ -25,3 +25,6 @@ is used to map objects into the database field
 3. last we create the sessionmaker
 
 #### Tables and models 
+
+### Storing blogs to the database
+
